@@ -1,0 +1,250 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row =>
+                    row.some(cell => cell !== '' && cell !== null && cell !== undefined)
+                );
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Latest news and tips on finance, making money, saving money, and personal finance.">
+    <meta name="keywords" content="finance, make money, save money, money tips, personal finance">
+    <meta name="author" content="Money News Aggregator">
+    <title>Money News Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=1521&format=png&color=000000">
+    <style>
+        /* Custom styles for loading spinner and card hover */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .news-card {
+            transition: transform 0.2s;
+        }
+        .news-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Money News Hub</h1>
+            <p class="mt-2 text-lg">Your source for finance, money-making, and saving tips</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- News Container -->
+        <section id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- News articles will be injected here -->
+        </section>
+        <!-- Loading Spinner -->
+        <div id="loading" class="spinner hidden"></div>
+        <!-- Error Message -->
+        <div id="error" class="text-red-500 text-center hidden"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Money News Hub. All rights reserved.</p>
+            <p class="mt-2">Aggregated from trusted sources. <a href="#privacy" class="underline">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- JavaScript to fetch and display news -->
+    <script>
+        // RSS feeds from finance-related sources
+        const rssFeeds = [
+            'https://www.forbes.com/money/feed/',
+            'https://www.cnbc.com/id/100727362/device/rss/rss.html',
+ —
+System: It looks like the artifact content was cut off. I'll complete the `index.html` file, ensuring the JavaScript section is fully implemented to fetch and display RSS feeds, and provide clear instructions for you to set up and deploy the site. The goal is a simple, automated finance news aggregator that’s beginner-friendly and optimized for views.
+
+### Completed Artifact
+Below is the complete `index.html` file, including the JavaScript to fetch RSS feeds using the rss2json.com API, display articles in a card layout, and handle errors/loading states. The design is mobile-friendly, SEO-optimized, and visually appealing with Tailwind CSS.
+
+<xaiArtifact artifact_id="0de94bc1-c81a-444b-ab5d-f7ecfe6354d2" artifact_version_id="17dbff99-7da7-4831-b7f2-012f6fd0ef96" title="index.html" contentType="text/html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Latest news and tips on finance, making money, saving money, and personal finance.">
+    <meta name="keywords" content="finance, make money, save money, money tips, personal finance">
+    <meta name="author" content="Money News Hub">
+    <title>Money News Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=1521&format=png&color=000000">
+    <style>
+        /* Custom styles for loading spinner and card hover */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .news-card {
+            transition: transform 0.2s;
+        }
+        .news-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Money News Hub</h1>
+            <p class="mt-2 text-lg">Your source for finance, money-making, and saving tips</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- News Container -->
+        <section id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- News articles will be injected here -->
+        </section>
+        <!-- Loading Spinner -->
+        <div id="loading" class="spinner"></div>
+        <!-- Error Message -->
+        <div id="error" class="text-red-500 text-center hidden"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Money News Hub. All rights reserved.</p>
+            <p class="mt-2">Aggregated from trusted sources. <a href="#privacy" class="underline">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <!-- JavaScript to fetch and display news -->
+    <script>
+        // RSS feeds from finance-related sources
+        const rssFeeds = [
+            'https://www.forbes.com/money/feed/',
+            'https://www.cnbc.com/id/100727362/device/rss/rss.html',
+            'https://money.com/rss/'
+        ];
+
+        // DOM elements
+        const newsContainer = document.getElementById('news-container');
+        const loadingSpinner = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+
+        // Function to fetch RSS feed and convert to JSON
+        async function fetchRSSFeed(feedUrl) {
+            try {
+                const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+                if (!response.ok) throw new Error('Failed to fetch feed');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching feed:', error);
+                return null;
+            }
+        }
+
+        // Function to display news articles
+        function displayNews(articles) {
+            articles.forEach(item => {
+                const articleCard = document.createElement('article');
+                articleCard.className = 'news-card bg-white rounded-lg shadow-md p-6';
+                articleCard.innerHTML = `
+                    <h2 class="text-xl font-semibold mb-2">
+                        <a href="${item.link}" target="_blank" class="hover:text-blue-600">${item.title}</a>
+                    </h2>
+                    <p class="text-gray-600 mb-4">${item.description ? item.description.slice(0, 150) + '...' : 'No description available'}</p>
+                    <p class="text-sm text-gray-500">Source: ${item.author || item.feed.title || 'Unknown'}</p>
+                    <p class="text-sm text-gray-500">${new Date(item.pubDate).toLocaleDateString()}</p>
+                `;
+                newsContainer.appendChild(articleCard);
+            });
+        }
+
+        // Main function to load all feeds
+        async function loadNews() {
+            loadingSpinner.classList.remove('hidden');
+            errorDiv.classList.add('hidden');
+            newsContainer.innerHTML = '';
+
+            try {
+                const allArticles = [];
+                for (const feedUrl of rssFeeds) {
+                    const feedData = await fetchRSSFeed(feedUrl);
+                    if (feedData && feedData.items) {
+                        allArticles.push(...feedData.items);
+                    }
+                }
+
+                if (allArticles.length === 0) {
+                    throw new Error('No articles found');
+                }
+
+                // Sort articles by date (newest first)
+                allArticles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+                displayNews(allArticles.slice(0, 30)); // Limit to 30 articles
+            } catch (error) {
+                errorDiv.textContent = 'Failed to load news. Please try again later.';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        }
+
+        // Load news when the page loads
+        window.onload = loadNews;
+    </script>
+</body>
+</html>
